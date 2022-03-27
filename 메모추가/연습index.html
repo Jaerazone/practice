@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+<body>
+    <div id="app">
+        
+        <h1>메모</h1>
+        <form>
+            <input type="text" v-model="title"><br>
+            <textarea cols="25" rows="10" v-model="memo"></textarea>
+            <input type="submit" value="추가" v-on:click="addMemo">
+        </form>
+
+
+        <memo-component v-for="memo in memolist"
+        v-bind:id="memo.id"
+        v-bind:key="memo.id"
+        v-on:delete="deleteMemo"
+        >
+            <template v-slot:title>{{memo.title}}</template>
+            <template v-slot:memo>{{memo.memo}}</template>
+        </memo-component>
+
+
+    </div>
+
+    <script src="./연습MemoComponent.js"></script>
+
+    <script>
+        new Vue({
+            el : "#app",
+            data : {
+                title : "",
+                memo : "",
+                id : 1,
+                memolist : [
+                    { id : 0 ,title : "제목입니다", memo : "메모입니당" }
+                ]
+            },
+            methods : {
+                addMemo : function(e) {
+                    e.preventDefault();
+                    this.memolist.push({
+                        id : this.id,
+                        title : this.title,
+                        memo : this.memo
+                    }),
+                    this.id++;
+                    this.title = "",
+                    this.memo = ""
+                },
+                deleteMemo : function (id) {
+                    let index=0;
+                    this.memolist.forEach((element, i) => {
+                        if(element.id == id) {
+                            index = i;
+                        }
+                    });
+                    this.memolist.splice(index,1)
+                }
+            }
+        })
+    </script>
+
+</body>
+</html>
