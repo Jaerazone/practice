@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+<body>
+    <div id="app">
+        <h1 v-bind:style="onStyle">{{school}}</h1>
+
+        <p v-if="login">{{name}}님 반갑습니다</p>
+        <div v-else>
+            <input type="text" v-model="name">
+            <button @click="loginBtn">login</button>
+        </div>
+
+
+        <h3>학생 리스트</h3>
+
+        <table>
+            <tr>
+                <td>번호</td>
+                <td>이름</td>
+            </tr>
+            <tr v-bind="students" v-for="student in students">
+                <td>{{student.number}}</td>
+                <td>{{student.studentName}}</td>
+            </tr>
+            
+        </table>
+
+        <h3>학생추가</h3>
+        <form @submit.prevent="arvSubmit">
+            이름 <input type="text" v-model="studentName">
+            점수 <input type="text" v-model="studentScore">
+            <input type="submit" value="Submit">
+        </form>
+        
+        <p>평균 : {{totleArv}}</p>
+    </div>
+
+    <script>
+        new Vue ({
+            el : "#app",
+            data : {
+                onStyle : {color : "blue"},
+                school : "00학교",
+                login : false,
+                name : "",
+                students : [
+                    {number : "1", studentName : "홍길동", studentScore: 80},
+                    {number : "2", studentName : "성춘향", studentScore: 70},
+                    {number : "3", studentName : "콩쥐", studentScore: 90}
+                ],
+                studentName : "",
+                studentScore : ""
+                
+            },
+            methods : {
+                loginBtn : function() {
+                    return this.login = !this.login;
+                },
+                arvSubmit : function() {
+                    this.students.push({
+                        number : this.students.length+1,
+                        studentName : this.studentName,
+                        studentScore : parseInt(this.studentScore)
+                    })
+                }
+            },
+            computed : {
+                totleArv : function() {
+                    let sum = 0;
+                    for(i =1; i<=this.students.length; i++) {
+                        sum += this.students[i-1].studentScore;
+                    }
+                    return sum/this.students.length;
+                }
+            }
+            
+            
+        })
+
+    </script>
+</body>
+</html>
